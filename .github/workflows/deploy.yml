@@ -27,7 +27,7 @@ jobs:
           npm run export
           touch ./out/.nojekyll
         env:
-          GITHUB_PAGES: ${{ github.ref == 'refs/heads/master' }}
+          GITHUB_PAGES: ${{ github.ref == 'refs/heads/main' }}
 
       # Deploy Netlify
       - name: Deploy to netlify
@@ -60,7 +60,7 @@ jobs:
             
       # Deploy gh-pages
       - uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./out
