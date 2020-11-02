@@ -26,9 +26,12 @@ jobs:
           npm run build
           npm run export
           touch ./out/.nojekyll
+        env:
+          GITHUB_PAGES: github.ref == 'refs/heads/master'
 
       # Deploy Netlify
       - name: Deploy to netlify
+        if: github.event_name == 'pull_request'
         run: |
           npm install netlify-cli
           npx netlify-cli deploy --dir=./out --message="update pages." 1> deploy.log
