@@ -1,0 +1,10 @@
+{
+    "editor.formatOnSave": true,
+    "files.exclude": {
+        ".github/**": true,
+        ".next/**": true,
+        "*-lock.json": true,
+        "node_modules/**": true,
+        "out/**": true
+    }
+}
