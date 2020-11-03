@@ -6,5 +6,6 @@
         "*-lock.json": true,
         "node_modules/**": true,
         "out/**": true
-    }
+	},
+	"editor.tabSize": 2
 }
