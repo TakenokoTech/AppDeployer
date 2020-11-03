@@ -2,7 +2,7 @@ import React from "react";
 import Head from "next/head";
 import styles from "../../styles/Home.module.css";
 import { makeStyles } from "@material-ui/core/styles";
-import QRCode from "qrcode";
+import { renderQR } from "../component/qr";
 
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
@@ -14,84 +14,73 @@ import Divider from "@material-ui/core/Divider";
 
 const useStyles = makeStyles((theme) => ({
   canvas: {
-    float: "right",
-    padding: "0 16px",
+    padding: "16px 32px",
   },
 }));
 
 export default function Detail() {
   const classes = useStyles();
 
-  async function renderQR(canves) {
-    try {
-      function qrGenerate(data) {
-        const canvas = new OffscreenCanvas(1, 1);
-        return new Promise((res, rej) =>
-          QRCode.toCanvas(canvas, data, {}, (err) =>
-            !err ? res(canvas) : rej(err)
-          )
-        );
-      }
-      canves
-        .getContext("bitmaprenderer")
-        .transferFromImageBitmap(
-          (await qrGenerate("http://takenoko.tech")).transferToImageBitmap()
-        );
-    } catch (e) {}
-  }
-
   function FormRow(props) {
     return (
-      <Grid container item xs={12} spacing={3}>
-        <Grid item xs={6}>
-          <Typography variant="body1">
-            <b>{props.value1}</b>
-          </Typography>
+      <Box p={1}>
+        <Grid container item xs={12}>
+          <Grid item xs={5} sm={6}>
+            <Typography variant="body1">
+              <b>{props.value1}</b>
+            </Typography>
+          </Grid>
+          <Grid item xs={7} sm={6}>
+            <Typography variant="body1">
+              {props.link ? (
+                <Link href={props.link}>{props.value2}</Link>
+              ) : (
+                props.value2
+              )}
+            </Typography>
+          </Grid>
         </Grid>
-        <Grid item xs={6}>
-          <Typography variant="body1">
-            {props.link ? (
-              <Link href={props.link}>{props.value2}</Link>
-            ) : (
-              props.value2
-            )}
-          </Typography>
-        </Grid>
-      </Grid>
+      </Box>
     );
   }
 
   return (
-    <Paper elevation={3}>
-      <Box p={3} m={3} pb={6}>
-        <Grid>
-          <Grid container spacing={1}>
-            <Grid item xs={6}>
-              <canvas
-                className={classes.canvas}
-                ref={renderQR}
-                width="180"
-                height="180"
-              />
+    <Paper elevation={4}>
+      <Box p={3} m={1}>
+        <Grid container spacing={3}>
+          <Box p={1} />
+          <Grid container>
+            <Grid item xs={1} sm={2}></Grid>
+            <Grid item xs={12} sm={4}>
+              <Box display="flex" justifyContent="center">
+                <canvas
+                  className={classes.canvas}
+                  ref={renderQR}
+                  width="160"
+                  height="160"
+                />
+              </Box>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} sm={4}>
               <Box display="flex" alignItems="center" css={{ height: "100%" }}>
-                <Box>
-                  QRコードまたはファイルを
-                  <br />
-                  ダウンロードして端末にダウンロード
-                  <br />
-                  <br />
-                  <Button variant="contained" color="secondary">
-                    Download
-                  </Button>
+                <Box flexGrow={1}>
+                  <Box py={1}>
+                    QRコードまたはファイルをダウンロードして端末にインストール
+                  </Box>
+                  <Box py={1} display="flex" justifyContent="flex-end">
+                    <Button variant="contained" color="secondary">
+                      Download
+                    </Button>
+                  </Box>
                 </Box>
               </Box>
             </Grid>
+            <Grid item xs={1} sm={2}></Grid>
           </Grid>
+          <Box p={3} />
           <Grid container spacing={1}>
-            <Grid item xs={2}></Grid>
-            <Grid item xs={8}>
+            <Grid item xs={1} sm={2}></Grid>
+            <Grid item xs={12} sm={8}>
               <FormRow
                 value1="Upload Date"
                 value2="2020/01/01 11:22"
@@ -109,7 +98,7 @@ export default function Detail() {
               />
               <FormRow
                 value1="Commit"
-                value2="3d1c53652b90235a28784b5...."
+                value2="3d1c536b90235a5...."
                 link="https://www.google.com/"
               />
               <FormRow
@@ -118,8 +107,9 @@ export default function Detail() {
                 link="https://www.google.com/"
               />
             </Grid>
-            <Grid item xs={2}></Grid>
+            <Grid item xs={1} sm={2}></Grid>
           </Grid>
+          <Box p={3} />
         </Grid>
       </Box>
     </Paper>
