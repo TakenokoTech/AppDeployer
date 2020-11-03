@@ -2,7 +2,7 @@ import React from "react";
 import Head from "next/head";
 import styles from "../../styles/Home.module.css";
 import { makeStyles } from "@material-ui/core/styles";
-import { renderQR } from "../component/qr";
+import QRCode from "qrcode";
 
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
@@ -17,6 +17,24 @@ const useStyles = makeStyles((theme) => ({
     padding: "16px 32px",
   },
 }));
+
+async function renderQR(canves) {
+  try {
+    function qrGenerate(data) {
+      const canvas = new OffscreenCanvas(1, 1);
+      return new Promise((res, rej) =>
+        QRCode.toCanvas(canvas, data, {}, (err) =>
+          !err ? res(canvas) : rej(err)
+        )
+      );
+    }
+    canves
+      .getContext("bitmaprenderer")
+      .transferFromImageBitmap(
+        (await qrGenerate("http://takenoko.tech")).transferToImageBitmap()
+      );
+  } catch (e) {}
+}
 
 export default function Detail() {
   const classes = useStyles();
