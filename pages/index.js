@@ -22,13 +22,14 @@ export default function Home() {
   return (
     <div className={classes.root}>
       <Header />
+      {/* <Container maxWidth="lg"> */}
       <Container maxWidth="lg">
         <Grid container spacing={3}>
-          <Grid item lg={9}>
+          <Grid item md={9} xs={12}>
             <Summary />
             <Detail />
           </Grid>
-          <Grid item lg={3}>
+          <Grid item md={3} xs={12}>
             <History />
           </Grid>
         </Grid>
