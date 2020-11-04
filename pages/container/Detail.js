@@ -11,6 +11,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import Divider from "@material-ui/core/Divider";
+import ArrowDownward from "@material-ui/icons/ArrowDownward";
 
 const useStyles = makeStyles((theme) => ({
   canvas: {
@@ -64,11 +65,15 @@ export default function Detail() {
             <Grid item xs={12} sm={4}>
               <Box display="flex" alignItems="center" css={{ height: "100%" }}>
                 <Box flexGrow={1}>
-                  <Box py={1}>
-                    QRコードまたはファイルをダウンロードして端末にインストール
+                  <Box py={1} pr={2}>
+                    QRコードまたはファイルから端末にインストールできます。
                   </Box>
-                  <Box py={1} display="flex" justifyContent="flex-end">
-                    <Button variant="contained" color="secondary">
+                  <Box py={1} pr={2} display="flex" justifyContent="flex-end">
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      startIcon={<ArrowDownward />}
+                    >
                       Download
                     </Button>
                   </Box>
@@ -77,6 +82,8 @@ export default function Detail() {
             </Grid>
             <Grid item xs={1} sm={2}></Grid>
           </Grid>
+          <Box p={1} />
+          <Divider width="100%" />
           <Box p={3} />
           <Grid container spacing={1}>
             <Grid item xs={1} sm={2}></Grid>
