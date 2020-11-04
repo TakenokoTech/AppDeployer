@@ -7,13 +7,14 @@ import Box from "@material-ui/core/Box";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
+import { Grid } from "@material-ui/core";
+import ButtonBase from "@material-ui/core/ButtonBase";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-    maxWidth: "36ch",
     backgroundColor: theme.palette.background.paper,
-    // backgroundColor: "#ccc",
+    padding: "0px",
   },
   inline: {
     display: "inline",
@@ -26,7 +27,23 @@ const useStyles = makeStyles((theme) => ({
     background: theme.palette.background.paper,
   },
   itemBaseSelected: {
-    background: "#FFB96E",
+    position: "relative",
+    background: theme.palette.primary.light,
+  },
+  itemBaseSelectedBar: {
+    position: "absolute",
+    background: theme.palette.primary.dark,
+    width: "4px",
+    height: "100%",
+    left: "0px",
+  },
+  button: {
+    width: "100%",
+    "&:hover, &$focusVisible": {
+      "& $itemBase": {
+        background: "#FCFCFC",
+      },
+    },
   },
 }));
 
@@ -35,15 +52,22 @@ export default function History() {
 
   const listItem = (isSelected) => {
     return (
-      <ListItem
-        className={isSelected ? classes.itemBaseSelected : classes.itemBase}
-      >
-        <div>
-          <p>2020/01/01 11:22</p>
-          <p>#234lk2</p>
-          <p>commit comment</p>
-        </div>
-      </ListItem>
+      <ButtonBase focusRipple className={classes.button}>
+        <ListItem
+          className={isSelected ? classes.itemBaseSelected : classes.itemBase}
+        >
+          <div
+            className={
+              isSelected ? classes.itemBaseSelectedBar : classes.itemBase
+            }
+          />
+          <div>
+            <p>2020/01/01 11:22</p>
+            <p>#234lk2</p>
+            <p>commit comment</p>
+          </div>
+        </ListItem>
+      </ButtonBase>
     );
   };
 

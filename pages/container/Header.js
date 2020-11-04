@@ -7,6 +7,9 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme) => ({
+  appBar: {
+    background: `linear-gradient(60deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+  },
   title: {
     flexGrow: 1,
   },
@@ -16,7 +19,7 @@ export default function Header() {
   const classes = useStyles();
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" className={classes.appBar}>
       <Toolbar>
         <Typography variant="h6" className={classes.title}>
           Apricot
