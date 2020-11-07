@@ -29,11 +29,11 @@ rules:
     "@typescript-eslint/no-use-before-define": ["error"],
     "quotes": ["error", "double"],
     "class-methods-use-this": ["error"],
-		"react/react-in-jsx-scope": "off",
-		"import/no-unresolved": "off",
-		"import/extensions": "off",
-		"no-use-before-define": "off",
-		"react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
-		"sort-imports": 0,
+    "react/react-in-jsx-scope": "off",
+    "import/no-unresolved": "off",
+    "import/extensions": "off",
+    "no-use-before-define": "off",
+    "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+    "sort-imports": 0,
     "import/order": [2, { "alphabetize": { "order": "asc" } }]
   }
