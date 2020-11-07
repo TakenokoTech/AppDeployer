@@ -1,11 +1,15 @@
 {
-    "editor.formatOnSave": true,
-    "files.exclude": {
-        ".github/**": true,
-        ".next/**": true,
-        "*-lock.json": true,
-        "node_modules/**": true,
-        "out/**": true
-	},
-	"editor.tabSize": 2
+  "editor.formatOnSave": true,
+  "files.exclude": {
+    ".github/**": true,
+    ".next/**": true,
+    "*-lock.json": true,
+    "node_modules/**": true,
+    "out/**": true
+  },
+  "editor.tabSize": 2,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
 }

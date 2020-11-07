@@ -1,11 +1,16 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Head from "next/head";
-import { ThemeProvider } from "@material-ui/core/styles";
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable react/jsx-props-no-spreading */
+
 import CssBaseline from "@material-ui/core/CssBaseline";
+import { ThemeProvider } from "@material-ui/core/styles";
+import { AppProps } from "next/dist/next-server/lib/router/router";
+import Head from "next/head";
+import PropTypes from "prop-types";
+import React from "react";
+
 import theme from "../styles/theme";
 
-export default function MyApp(props) {
+export default function MyApp(props: AppProps) : JSX.Element {
   const { Component, pageProps } = props;
 
   React.useEffect(() => {
@@ -16,7 +21,7 @@ export default function MyApp(props) {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <Head>
         <title>Apricot</title>
         <meta
@@ -28,7 +33,7 @@ export default function MyApp(props) {
         <CssBaseline />
         <Component {...pageProps} />
       </ThemeProvider>
-    </React.Fragment>
+    </>
   );
 }
 

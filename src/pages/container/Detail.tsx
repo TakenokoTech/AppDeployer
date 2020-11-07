@@ -1,42 +1,43 @@
-import React from "react";
-import Head from "next/head";
-import styles from "../../styles/Home.module.css";
+import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
+import Divider from "@material-ui/core/Divider";
+import Grid from "@material-ui/core/Grid";
+import Link from "@material-ui/core/Link";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import ArrowDownward from "@material-ui/icons/ArrowDownward";
+import React from "react";
+import { AppInfo } from "../../components/DataSource";
 import QrUtil from "../../components/QrUtil";
 
-import Paper from "@material-ui/core/Paper";
-import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Divider from "@material-ui/core/Divider";
-import ArrowDownward from "@material-ui/icons/ArrowDownward";
-
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   canvas: {
     padding: "16px 32px",
   },
 }));
 
-export default function Detail() {
+export default function Detail(props: { appInfo: AppInfo }) : JSX.Element {
   const classes = useStyles();
 
-  function FormRow(props) {
+  const { appInfo } = props;
+  const { text, link } = appInfo;
+
+  function FormRow(args: { value1: string; value2: string; link: string }) {
     return (
       <Box p={1}>
         <Grid container item xs={12}>
           <Grid item xs={5} sm={6}>
             <Typography variant="body1">
-              <b>{props.value1}</b>
+              <b>{args.value1}</b>
             </Typography>
           </Grid>
           <Grid item xs={7} sm={6}>
             <Typography variant="body1">
-              {props.link ? (
-                <Link href={props.link}>{props.value2}</Link>
+              {args.link ? (
+                <Link href={args.link}>{args.value2}</Link>
               ) : (
-                props.value2
+                args.value2
               )}
             </Typography>
           </Grid>
@@ -51,7 +52,7 @@ export default function Detail() {
         <Grid container spacing={3}>
           <Box p={1} />
           <Grid container>
-            <Grid item xs={1} sm={2}></Grid>
+            <Grid item xs={1} sm={2} />
             <Grid item xs={12} sm={4}>
               <Box display="flex" justifyContent="center">
                 <canvas
@@ -80,13 +81,13 @@ export default function Detail() {
                 </Box>
               </Box>
             </Grid>
-            <Grid item xs={1} sm={2}></Grid>
+            <Grid item xs={1} sm={2} />
           </Grid>
           <Box p={1} />
-          <Divider width="100%" />
+          <Divider style={{ width: "100%" }} />
           <Box p={3} />
           <Grid container spacing={1}>
-            <Grid item xs={1} sm={2}></Grid>
+            <Grid item xs={1} sm={2} />
             <Grid item xs={12} sm={8}>
               <FormRow
                 value1="Upload Date"
@@ -95,26 +96,22 @@ export default function Detail() {
               />
               <FormRow
                 value1="Repository"
-                value2="Repository"
-                link="https://www.google.com/"
+                value2={text.repository}
+                link={link.repository}
               />
               <FormRow
                 value1="Brunch"
-                value2="master"
-                link="https://www.google.com/"
+                value2={text.branch}
+                link={link.branch}
               />
               <FormRow
                 value1="Commit"
-                value2="3d1c536b90235a5...."
-                link="https://www.google.com/"
+                value2={text.commit}
+                link={link.commit}
               />
-              <FormRow
-                value1="Log"
-                value2="PR-1:build"
-                link="https://www.google.com/"
-              />
+              <FormRow value1="Log" value2={text.log} link={link.log} />
             </Grid>
-            <Grid item xs={1} sm={2}></Grid>
+            <Grid item xs={1} sm={2} />
           </Grid>
           <Box p={3} />
         </Grid>
