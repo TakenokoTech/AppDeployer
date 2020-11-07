@@ -8,7 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import React from "react";
-import { AppInfo } from "../../components/DataSource";
+import { AppInfo, initAppInfo } from "../../components/DataSource";
 import QrUtil from "../../components/QrUtil";
 
 const useStyles = makeStyles(() => ({
@@ -21,7 +21,7 @@ export default function Detail(props: { appInfo: AppInfo }) : JSX.Element {
   const classes = useStyles();
 
   const { appInfo } = props;
-  const { text, link } = appInfo;
+  const { text, link } = appInfo || initAppInfo;
 
   function FormRow(args: { value1: string; value2: string; link: string }) {
     return (

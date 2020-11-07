@@ -59,6 +59,27 @@ async function getAppInfo(): Promise<AppInfo> {
   };
 }
 
+export const initAppInfo: AppInfo = {
+  logoImg: "",
+  packageName: "",
+  appName: "",
+  uploadDate: "",
+  text: {
+    repository: "",
+    branch: "",
+    commit: "",
+    log: "",
+  },
+  link: {
+    repository: "",
+    branch: "",
+    commit: "",
+    log: "",
+  },
+  history: [],
+};
+
 export default {
   getAppInfo,
+  initAppInfo,
 };
