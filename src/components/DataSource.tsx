@@ -1,3 +1,7 @@
+import {
+  getArtifact, getPullRequest, getWorkflow, searchRepositories,
+} from "./GithubRepository";
+
 export interface Description {
   repository: string;
   branch: string;
@@ -22,6 +26,13 @@ export interface AppInfo {
 }
 
 async function getAppInfo(): Promise<AppInfo> {
+  searchRepositories("");
+  const wf = await getWorkflow();
+  wf.forEach(async (it) => {
+    await getArtifact(it);
+    await getPullRequest(it);
+  });
+
   return {
     logoImg: "apricot_img.png",
     packageName: "tach.takenoko.sampleapp",
