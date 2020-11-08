@@ -1,10 +1,15 @@
-import React from "react";
-import Document, { Html, Head, Main, NextScript } from "next/document";
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable class-methods-use-this */
+
 import { ServerStyleSheets } from "@material-ui/core/styles";
+import Document, {
+  Html, Head, Main, NextScript,
+} from "next/document";
+import React from "react";
 import theme from "../styles/theme";
 
 export default class MyDocument extends Document {
-  render() {
+  render() : JSX.Element {
     return (
       <Html lang="en">
         <Head>
@@ -52,10 +57,9 @@ MyDocument.getInitialProps = async (ctx) => {
   const sheets = new ServerStyleSheets();
   const originalRenderPage = ctx.renderPage;
 
-  ctx.renderPage = () =>
-    originalRenderPage({
-      enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
-    });
+  ctx.renderPage = () => originalRenderPage({
+    enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
+  });
 
   const initialProps = await Document.getInitialProps(ctx);
 
