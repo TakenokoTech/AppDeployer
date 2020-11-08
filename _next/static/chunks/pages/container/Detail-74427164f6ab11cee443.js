@@ -1,0 +1,1 @@
+_N_E=(window.webpackJsonp_N_E=window.webpackJsonp_N_E||[]).push([[12],{AFM5:function(n,_,w){(window.__NEXT_P=window.__NEXT_P||[]).push(["/container/Detail",function(){return w("rXHa")}])}},[["AFM5",0,1,2,3,4,5,6,7]]]);

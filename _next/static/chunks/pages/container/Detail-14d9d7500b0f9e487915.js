@@ -1,1 +1,0 @@
-_N_E=(window.webpackJsonp_N_E=window.webpackJsonp_N_E||[]).push([[12],{gVKX:function(n,_,w){(window.__NEXT_P=window.__NEXT_P||[]).push(["/container/Detail",function(){return w("2Ch9")}])}},[["gVKX",0,1,2,3,4,5,6,7]]]);
