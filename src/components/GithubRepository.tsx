@@ -2,16 +2,12 @@ import queryString from "query-string";
 
 export default {};
 
-export async function searchRepositories(_searchWord: string): Promise<any> {
-  const searchWord = "TakenokoTech/UniTool";
-
-  const query = queryString.stringify(
-    {
-      q: searchWord,
-      sort: "stars",
-      order: "desc",
-    },
-  );
+export async function searchRepositories(searchWord: string): Promise<any> {
+  const query = queryString.stringify({
+    q: searchWord,
+    sort: "stars",
+    order: "desc",
+  });
 
   const resp = await fetch(`https://api.github.com/search/repositories?${query}`);
   const json = await resp.json();
@@ -41,8 +37,15 @@ export async function getWorkflow(): Promise<WorkflowItem[]> {
   const resp2 = await fetch(url);
   const json2 = await resp2.json();
 
-  const workflows = [0, 1, 2].map((index) => {
-    const workflow: WorkflowItem = json2.workflow_runs[index];
+  // const workflows = [0, 1, 2].map((index) => {
+  //   const workflow: WorkflowItem = json2.workflow_runs[index];
+  //   console.log(`>>>>> ${url}`);
+  //   console.log(workflow);
+  //   console.log("");
+  //   return workflow;
+  // });
+
+  const workflows = json2.workflow_runs.map((workflow) => {
     console.log(`>>>>> ${url}`);
     console.log(workflow);
     console.log("");
@@ -82,46 +85,48 @@ export async function getPullRequest(workflow: WorkflowItem): Promise<any> {
 
 /* eslint-disable camelcase */
 interface ArtifactItem {
-  id: number,
-  node_id: string,
-  name: string,
-  size_in_bytes: number,
-  url: string,
-  archive_download_url: string,
-  expired: true,
-  created_at: string,
-  updated_at: string,
-  expires_at: string
+  id: number;
+  node_id: string;
+  name: string;
+  size_in_bytes: number;
+  url: string;
+  archive_download_url: string;
+  expired: true;
+  created_at: string;
+  updated_at: string;
+  expires_at: string;
 }
 
 interface WorkflowItem {
-  id: number,
-  node_id: string,
-  head_branch: string,
-  head_sha: string,
-  run_number: number,
-  event: string,
-  status: string,
-  conclusion: string,
-  workflow_id: number,
-  check_suite_id: number,
-  check_suite_node_id: string,
-  url: string,
-  html_url: string,
-  pull_requests: { url: string, id: number }[]
-  created_at: string,
-  updated_at: string,
-  artifacts_url: string,
+  id: number;
+  node_id: string;
+  head_branch: string;
+  head_sha: string;
+  run_number: number;
+  event: string;
+  status: string;
+  conclusion: string;
+  workflow_id: number;
+  check_suite_id: number;
+  check_suite_node_id: string;
+  url: string;
+  html_url: string;
+  pull_requests: { url: string; id: number }[];
+  created_at: string;
+  updated_at: string;
+  artifacts_url: string;
+  repository: any;
+  head_commit: any;
 }
 
 interface PullRequestItem {
-  url: string,
-  id: number,
-  node_id: string,
-  html_url: string,
-  diff_url: string,
-  patch_url: string,
-  issue_url: string,
-  state: string,
-  title: string
+  url: string;
+  id: number;
+  node_id: string;
+  html_url: string;
+  diff_url: string;
+  patch_url: string;
+  issue_url: string;
+  state: string;
+  title: string;
 }

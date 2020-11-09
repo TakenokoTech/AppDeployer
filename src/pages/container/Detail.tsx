@@ -17,11 +17,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function Detail(props: { appInfo: AppInfo }) : JSX.Element {
+export default function Detail(props: { appInfo: AppInfo }): JSX.Element {
   const classes = useStyles();
 
   const { appInfo } = props;
-  const { text, link } = appInfo || initAppInfo;
+  const { uploadDate, text, link } = appInfo || initAppInfo;
 
   function FormRow(args: { value1: string; value2: string; link: string }) {
     return (
@@ -33,13 +33,7 @@ export default function Detail(props: { appInfo: AppInfo }) : JSX.Element {
             </Typography>
           </Grid>
           <Grid item xs={7} sm={6}>
-            <Typography variant="body1">
-              {args.link ? (
-                <Link href={args.link}>{args.value2}</Link>
-              ) : (
-                args.value2
-              )}
-            </Typography>
+            <Typography variant="body1">{args.link ? <Link href={args.link}>{args.value2}</Link> : args.value2}</Typography>
           </Grid>
         </Grid>
       </Box>
@@ -55,12 +49,7 @@ export default function Detail(props: { appInfo: AppInfo }) : JSX.Element {
             <Grid item xs={1} sm={2} />
             <Grid item xs={12} sm={4}>
               <Box display="flex" justifyContent="center">
-                <canvas
-                  className={classes.canvas}
-                  ref={(el) => QrUtil.renderQR(el, "http://takenoko.tech")}
-                  width="160"
-                  height="160"
-                />
+                <canvas className={classes.canvas} ref={(el) => QrUtil.renderQR(el, "http://takenoko.tech")} width="160" height="160" />
               </Box>
             </Grid>
             <Grid item xs={12} sm={4}>
@@ -70,11 +59,7 @@ export default function Detail(props: { appInfo: AppInfo }) : JSX.Element {
                     QRコードまたはファイルから端末にインストールできます。
                   </Box>
                   <Box py={1} pr={2} display="flex" justifyContent="flex-end">
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      startIcon={<ArrowDownward />}
-                    >
+                    <Button variant="contained" color="secondary" startIcon={<ArrowDownward />}>
                       Download
                     </Button>
                   </Box>
@@ -89,26 +74,10 @@ export default function Detail(props: { appInfo: AppInfo }) : JSX.Element {
           <Grid container spacing={1}>
             <Grid item xs={1} sm={2} />
             <Grid item xs={12} sm={8}>
-              <FormRow
-                value1="Upload Date"
-                value2="2020/01/01 11:22"
-                link={null}
-              />
-              <FormRow
-                value1="Repository"
-                value2={text.repository}
-                link={link.repository}
-              />
-              <FormRow
-                value1="Brunch"
-                value2={text.branch}
-                link={link.branch}
-              />
-              <FormRow
-                value1="Commit"
-                value2={text.commit}
-                link={link.commit}
-              />
+              <FormRow value1="Upload Date" value2={uploadDate} link={null} />
+              <FormRow value1="Repository" value2={text.repository} link={link.repository} />
+              <FormRow value1="Brunch" value2={text.branch} link={link.branch} />
+              <FormRow value1="Commit" value2={text.commit} link={link.commit} />
               <FormRow value1="Log" value2={text.log} link={link.log} />
             </Grid>
             <Grid item xs={1} sm={2} />

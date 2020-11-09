@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function History(props: { appInfo: AppInfo }) : JSX.Element {
+export default function History(props: { appInfo: AppInfo }): JSX.Element {
   const classes = useStyles();
 
   const { appInfo } = props;
@@ -54,14 +54,8 @@ export default function History(props: { appInfo: AppInfo }) : JSX.Element {
 
   const listItem = (item: HistoryItem, isSelected: boolean) => (
     <ButtonBase focusRipple className={classes.button} key={item.date}>
-      <ListItem
-        className={isSelected ? classes.itemBaseSelected : classes.itemBase}
-      >
-        <div
-          className={
-            isSelected ? classes.itemBaseSelectedBar : classes.itemBase
-          }
-        />
+      <ListItem className={isSelected ? classes.itemBaseSelected : classes.itemBase}>
+        <div className={isSelected ? classes.itemBaseSelectedBar : classes.itemBase} />
         <div>
           <p>{item.date}</p>
           <p>{item.commit}</p>
@@ -78,8 +72,10 @@ export default function History(props: { appInfo: AppInfo }) : JSX.Element {
         <Divider />
         <List className={classes.root}>
           {joinIndexed(
-            history.map((h) => ((i: number) => listItem(h, i === 0))),
-            (i) => <Divider key={i} />,
+            history.map((h) => (i: number) => listItem(h, i === 0)),
+            (i) => (
+              <Divider key={i} />
+            )
           )}
         </List>
       </Paper>
