@@ -31,16 +31,7 @@ export const initAppInfo: AppInfo = {
   packageName: "",
   appName: "",
   uploadDate: "",
-  artifact: [
-    {
-      name: "app1",
-      url: "app1",
-    },
-    {
-      name: "app2",
-      url: "app2",
-    },
-  ],
+  artifact: [],
   text: {
     repository: "",
     branch: "",
@@ -61,6 +52,16 @@ const mockData: AppInfo = {
   packageName: "tach.takenoko.sampleapp",
   appName: "SampleApp",
   uploadDate: "2020/01/01 11:22",
+  artifact: [
+    {
+      name: "app1",
+      url: "app1",
+    },
+    {
+      name: "app2",
+      url: "app2",
+    },
+  ],
   text: {
     repository: "Repository",
     branch: "master",
