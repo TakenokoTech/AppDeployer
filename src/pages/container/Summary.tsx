@@ -1,3 +1,4 @@
+import { Chip } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -19,13 +20,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function Summary(props: { appInfo: AppInfo }) : JSX.Element {
+export default function Summary(props: { appInfo: AppInfo }): JSX.Element {
   const classes = useStyles();
 
   const { appInfo } = props;
-  const {
-    logoImg, packageName, appName, uploadDate, text,
-  } = appInfo || initAppInfo;
+  const { logoImg, packageName, appName, uploadDate, text } = appInfo || initAppInfo;
   const { branch } = text;
 
   return (
@@ -41,12 +40,8 @@ export default function Summary(props: { appInfo: AppInfo }) : JSX.Element {
               <Typography variant="h3">{appName}</Typography>
             </Box>
             <Box component="div" py={2}>
-              <Typography variant="body1">
-                {`Brunch: ${branch}`}
-              </Typography>
-              <Typography variant="body1">
-                {`Upload Date: ${uploadDate}`}
-              </Typography>
+              <Typography variant="body1">{`Brunch: ${branch}`}</Typography>
+              <Typography variant="body1">{`Upload Date: ${uploadDate}`}</Typography>
             </Box>
           </Grid>
         </Grid>

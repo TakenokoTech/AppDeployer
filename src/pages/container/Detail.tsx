@@ -1,3 +1,4 @@
+import { Chip, FormControl, InputLabel, NativeSelect } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
@@ -22,6 +23,8 @@ export default function Detail(props: { appInfo: AppInfo }): JSX.Element {
 
   const { appInfo } = props;
   const { uploadDate, text, link } = appInfo || initAppInfo;
+  let url = appInfo.artifact.length > 0 ? appInfo.artifact[0].url : "";
+  console.log(url);
 
   function FormRow(args: { value1: string; value2: string; link: string }) {
     return (
@@ -49,8 +52,22 @@ export default function Detail(props: { appInfo: AppInfo }): JSX.Element {
             <Grid item xs={1} sm={2} />
             <Grid item xs={12} sm={4}>
               <Box display="flex" justifyContent="center">
-                <canvas className={classes.canvas} ref={(el) => QrUtil.renderQR(el, "http://takenoko.tech")} width="160" height="160" />
+                <canvas className={classes.canvas} ref={(el) => QrUtil.renderQR(el, url)} width="160" height="160" />
               </Box>
+              <Grid container justify="center" spacing={1}>
+                {appInfo.artifact.map((it, i) => (
+                  <Grid item key={i}>
+                    <Chip
+                      label={it.name}
+                      onClick={() => {
+                        url = it.url;
+                      }}
+                      variant={url === it.url ? "default" : "outlined"}
+                      color="secondary"
+                    />
+                  </Grid>
+                ))}
+              </Grid>
             </Grid>
             <Grid item xs={12} sm={4}>
               <Box display="flex" alignItems="center" css={{ height: "100%" }}>

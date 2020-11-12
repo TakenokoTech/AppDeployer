@@ -37,14 +37,6 @@ export async function getWorkflow(): Promise<WorkflowItem[]> {
   const resp2 = await fetch(url);
   const json2 = await resp2.json();
 
-  // const workflows = [0, 1, 2].map((index) => {
-  //   const workflow: WorkflowItem = json2.workflow_runs[index];
-  //   console.log(`>>>>> ${url}`);
-  //   console.log(workflow);
-  //   console.log("");
-  //   return workflow;
-  // });
-
   const workflows = json2.workflow_runs.map((workflow) => {
     console.log(`>>>>> ${url}`);
     console.log(workflow);
@@ -55,13 +47,13 @@ export async function getWorkflow(): Promise<WorkflowItem[]> {
   return workflows;
 }
 
-export async function getArtifact(workflow: WorkflowItem): Promise<ArtifactItem> {
+export async function getArtifact(workflow: WorkflowItem): Promise<ArtifactItem[]> {
   const url = workflow.artifacts_url;
 
   const resp = await fetch(url);
   const json = await resp.json();
 
-  const artifact: ArtifactItem = json.artifacts[0];
+  const artifact: ArtifactItem[] = json.artifacts;
   console.log(`>>>>> ${url}`);
   console.log(artifact);
   console.log("");
@@ -84,7 +76,7 @@ export async function getPullRequest(workflow: WorkflowItem): Promise<any> {
 }
 
 /* eslint-disable camelcase */
-interface ArtifactItem {
+export interface ArtifactItem {
   id: number;
   node_id: string;
   name: string;
@@ -97,7 +89,7 @@ interface ArtifactItem {
   expires_at: string;
 }
 
-interface WorkflowItem {
+export interface WorkflowItem {
   id: number;
   node_id: string;
   head_branch: string;
