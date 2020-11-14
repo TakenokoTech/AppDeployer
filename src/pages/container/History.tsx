@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import Box from "@material-ui/core/Box";
 import ButtonBase from "@material-ui/core/ButtonBase";
 import Divider from "@material-ui/core/Divider";
@@ -71,19 +72,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function History(props: { appInfo: AppInfo }): JSX.Element {
+interface HistoryProps {
+  appInfo: AppInfo;
+  changeItem: (commit: string) => void;
+}
+
+export default function History(props: HistoryProps): JSX.Element {
   const classes = useStyles();
 
   const { appInfo } = props;
   const { history } = appInfo || initAppInfo;
 
   const listItem = (item: HistoryItem, isSelected: boolean) => (
-    <ButtonBase focusRipple className={classes.button} key={item.date}>
+    <ButtonBase focusRipple className={classes.button} key={item.date} onClick={() => props.changeItem(item.commit)}>
       <ListItem className={isSelected ? classes.itemBaseSelected : classes.itemBase}>
         <div className={isSelected ? classes.itemBaseSelectedBar : classes.itemBase} />
         <div className={classes.itemText}>
           <div className={classes.deteText}>
-            {item.date} [{item.commit}]
+            {item.date} [{item.commit.substring(0, 6)}]
           </div>
           <div className={classes.branchText}>{item.branch}</div>
           <div className={classes.commentText}>{item.comment}</div>

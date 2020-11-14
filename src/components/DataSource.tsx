@@ -96,14 +96,14 @@ const mockData: AppInfo = {
   ],
 };
 
-async function getAppInfo(): Promise<AppInfo> {
+async function getAppInfo(commit = ""): Promise<AppInfo> {
   // searchRepositories("");
   const wf = await getWorkflow();
   let artifacts: ArtifactItem[] = [];
 
   if (wf.length > 1) {
     wf.sort((a, b) => (moment(a.updated_at).unix() < moment(b.updated_at).unix() ? 1 : -1));
-    artifacts = await getArtifact(wf[1]);
+    artifacts = await getArtifact(wf.find((it) => it.head_commit === commit) || wf[0]);
     // await getPullRequest(it);
   }
 
@@ -115,7 +115,7 @@ async function getAppInfo(): Promise<AppInfo> {
     text: {
       repository: wf[0].repository.full_name,
       branch: wf[0].head_branch,
-      commit: wf[0].head_commit.id.substr(0, 6),
+      commit: wf[0].head_commit.id,
       log: `${wf[0].id}`,
     },
     artifact: artifacts.map((it) => ({
@@ -131,7 +131,7 @@ async function getAppInfo(): Promise<AppInfo> {
     history: wf.map((it) => ({
       date: it.updated_at.replace(/[A-Z]/g, " "),
       branch: it.head_branch,
-      commit: it.head_commit.id.substr(0, 6),
+      commit: it.head_commit.id,
       comment: it.head_commit.message,
     })),
   };

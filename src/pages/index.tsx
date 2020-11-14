@@ -14,8 +14,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function Home(appInfo: AppInfo) : JSX.Element {
+export default function Home(appInfo: AppInfo): JSX.Element {
   const classes = useStyles();
+
+  const changeItem = async (commit: string) => {
+    console.log(commit);
+    // appInfo = await DataSource.getAppInfo(commit);
+  };
 
   return (
     <div className={classes.root}>
@@ -27,7 +32,7 @@ export default function Home(appInfo: AppInfo) : JSX.Element {
             <Detail appInfo={appInfo} />
           </Grid>
           <Grid item md={3} xs={12}>
-            <History appInfo={appInfo} />
+            <History appInfo={appInfo} changeItem={changeItem} />
           </Grid>
         </Grid>
       </Container>

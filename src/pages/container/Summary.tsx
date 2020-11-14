@@ -7,9 +7,16 @@ import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
 import { AppInfo, initAppInfo } from "../../components/DataSource";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
+  summaryContainer: {
+    wordWrap: "break-word",
+  },
   logoContainer: {
     position: "relative",
+    display: "none",
+    [theme.breakpoints.up("md")]: {
+      display: "block",
+    },
   },
   logoImg: {
     position: "absolute",
@@ -29,7 +36,7 @@ export default function Summary(props: { appInfo: AppInfo }): JSX.Element {
 
   return (
     <Paper elevation={3}>
-      <Box p={3} my={3}>
+      <Box p={3} my={3} className={classes.summaryContainer}>
         <Grid container spacing={1}>
           <Grid item xs={3} sm={4} className={classes.logoContainer}>
             <img className={classes.logoImg} src={logoImg} alt="" />
