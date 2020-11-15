@@ -106,7 +106,7 @@ export default function History(props: HistoryProps): JSX.Element {
         <div className={classes.scroll}>
           <List className={classes.root}>
             {joinIndexed(
-              history.map((h) => (i: number) => listItem(h, i === 0)),
+              history.map((h) => (i: number) => listItem(h, h.commit === appInfo.text.commit)),
               (i) => (
                 <Divider key={i} />
               )

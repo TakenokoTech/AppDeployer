@@ -1,3 +1,6 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable max-len */
+
 import moment from "moment";
 import { ArtifactItem, getArtifact, getPullRequest, getWorkflow, searchRepositories, WorkflowItem } from "./GithubRepository";
 
@@ -96,39 +99,44 @@ const mockData: AppInfo = {
   ],
 };
 
-async function getAppInfo(commit = ""): Promise<AppInfo> {
-  // searchRepositories("");
-  const wf = await getWorkflow();
-  let artifacts: ArtifactItem[] = [];
+async function getAppInfo(commit = null): Promise<AppInfo> {
+  const list = await getWorkflow();
 
-  if (wf.length > 1) {
-    wf.sort((a, b) => (moment(a.updated_at).unix() < moment(b.updated_at).unix() ? 1 : -1));
-    artifacts = await getArtifact(wf.find((it) => it.head_commit === commit) || wf[0]);
-    // await getPullRequest(it);
+  if (list.length < 1) {
+    return initAppInfo;
   }
+
+  if (!commit) {
+    commit = list[0].head_commit.id;
+  }
+
+  list.sort((a, b) => (moment(a.updated_at).unix() < moment(b.updated_at).unix() ? 1 : -1));
+  const workflow = list.find((it) => it.head_commit.id === commit) || list[0];
+  const promise = list.filter((it) => it.head_commit.id === commit).map((it) => getArtifact(it));
+  const artifacts = (await Promise.all(promise)).flatMap((it) => it).filter((v) => !!v);
 
   return {
     logoImg: "apricot_img.png",
-    packageName: wf[0].repository.full_name,
-    appName: wf[0].repository.name,
-    uploadDate: wf[0].updated_at.replace(/[A-Z]/g, " "),
+    packageName: workflow.repository.full_name,
+    appName: workflow.repository.name,
+    uploadDate: workflow.updated_at.replace(/[A-Z]/g, " "),
     text: {
-      repository: wf[0].repository.full_name,
-      branch: wf[0].head_branch,
-      commit: wf[0].head_commit.id,
-      log: `${wf[0].id}`,
+      repository: workflow.repository.full_name,
+      branch: workflow.head_branch,
+      commit: workflow.head_commit.id,
+      log: `${workflow.id}`,
     },
     artifact: artifacts.map((it) => ({
       name: it.name,
       url: it.archive_download_url,
     })),
     link: {
-      repository: `https://github.com/${wf[0].repository.full_name}`,
-      branch: `https://github.com/TakenokoTech/FlutterArchitecture/tree/${wf[0].head_branch}`,
-      commit: `https://github.com/TakenokoTech/FlutterArchitecture/commit/${wf[0].head_commit.id}`,
-      log: `https://github.com/${wf[0].repository.full_name}/actions/runs/${wf[0].id}`,
+      repository: `https://github.com/${workflow.repository.full_name}`,
+      branch: `https://github.com/TakenokoTech/FlutterArchitecture/tree/${workflow.head_branch}`,
+      commit: `https://github.com/TakenokoTech/FlutterArchitecture/commit/${workflow.head_commit.id}`,
+      log: `https://github.com/${workflow.repository.full_name}/actions/runs/${workflow.id}`,
     },
-    history: wf.map((it) => ({
+    history: list.map((it) => ({
       date: it.updated_at.replace(/[A-Z]/g, " "),
       branch: it.head_branch,
       commit: it.head_commit.id,

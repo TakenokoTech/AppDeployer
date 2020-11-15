@@ -1,46 +1,66 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable react/destructuring-assignment */
+
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import { makeStyles } from "@material-ui/core/styles";
+import { Theme } from "@material-ui/core/styles/createMuiTheme";
+import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles";
 import React from "react";
-import DataSource, { AppInfo } from "../components/DataSource";
+import DataSource, { AppInfo, initAppInfo } from "../components/DataSource";
 import Detail from "./container/Detail";
 import Header from "./container/Header";
 import History from "./container/History";
 import Summary from "./container/Summary";
 
-const useStyles = makeStyles(() => ({
+const styles = () => ({
   root: {
     flexGrow: 1,
   },
-}));
+});
 
-export default function Home(appInfo: AppInfo): JSX.Element {
-  const classes = useStyles();
-
-  const changeItem = async (commit: string) => {
-    console.log(commit);
-    // appInfo = await DataSource.getAppInfo(commit);
-  };
-
-  return (
-    <div className={classes.root}>
-      <Header />
-      <Container maxWidth="lg">
-        <Grid container spacing={3}>
-          <Grid item md={9} xs={12}>
-            <Summary appInfo={appInfo} />
-            <Detail appInfo={appInfo} />
-          </Grid>
-          <Grid item md={3} xs={12}>
-            <History appInfo={appInfo} changeItem={changeItem} />
-          </Grid>
-        </Grid>
-      </Container>
-    </div>
-  );
+interface HomeProps extends WithStyles<typeof styles> {
+  classes: any;
 }
 
-Home.getInitialProps = async () => {
-  const appInfo = await DataSource.getAppInfo();
-  return appInfo;
-};
+interface HomeState {
+  appInfo: AppInfo;
+}
+
+class Home extends React.Component<HomeProps, HomeState> {
+  constructor(props: HomeProps) {
+    super(props);
+    this.state = { appInfo: initAppInfo };
+
+    (async () => {
+      const appInfo = await DataSource.getAppInfo();
+      this.setState({ appInfo });
+    })();
+  }
+
+  render() {
+    const { classes } = this.props;
+    const changeItem = async (commit: string) => {
+      const appInfo = await DataSource.getAppInfo(commit);
+      this.setState({ appInfo });
+    };
+
+    return (
+      <div className={classes.root}>
+        <Header />
+        <Container maxWidth="lg">
+          <Grid container spacing={3}>
+            <Grid item md={9} xs={12}>
+              <Summary appInfo={this.state.appInfo} />
+              <Detail appInfo={this.state.appInfo} />
+            </Grid>
+            <Grid item md={3} xs={12}>
+              <History appInfo={this.state.appInfo} changeItem={changeItem} />
+            </Grid>
+          </Grid>
+        </Container>
+      </div>
+    );
+  }
+}
+
+export default withStyles(styles)(Home);

@@ -33,16 +33,15 @@ export async function getArtifactory(): Promise<any> {
 */
 
 export async function getWorkflow(): Promise<WorkflowItem[]> {
-  const url = "https://api.github.com/repos/TakenokoTech/FlutterArchitecture/actions/runs";
+  const url = "https://api.github.com/repos/TakenokoTech/UniTool/actions/runs";
   const resp2 = await fetch(url);
   const json2 = await resp2.json();
 
-  const workflows = json2.workflow_runs.map((workflow) => {
-    console.log(`>>>>> ${url}`);
-    console.log(workflow);
-    console.log("");
-    return workflow;
-  });
+  const workflows = json2.workflow_runs.map((workflow) => workflow);
+  // console.log(workflow.head_commit.id);
+  // console.log(`>>>>> ${url}`);
+  // console.log(workflow);
+  // console.log("");
 
   return workflows;
 }
@@ -54,9 +53,10 @@ export async function getArtifact(workflow: WorkflowItem): Promise<ArtifactItem[
   const json = await resp.json();
 
   const artifact: ArtifactItem[] = json.artifacts;
-  console.log(`>>>>> ${url}`);
-  console.log(artifact);
-  console.log("");
+  // console.log(artifact?.length ?? 0);
+  // console.log(`>>>>> ${url}`);
+  // console.log(artifact);
+  // console.log("");
 
   return artifact;
 }

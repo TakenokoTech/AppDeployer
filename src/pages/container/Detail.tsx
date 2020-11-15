@@ -14,14 +14,28 @@ import React from "react";
 import { AppInfo, initAppInfo } from "../../components/DataSource";
 import QrUtil from "../../components/QrUtil";
 
-export default class Detail extends React.Component<{ appInfo: AppInfo }, { url: string }> {
+interface DetailProps {
+  appInfo: AppInfo;
+}
+interface DetailState {
+  url: string;
+}
+
+export default class Detail extends React.Component<DetailProps, DetailState> {
   constructor(props: { appInfo: AppInfo }) {
     super(props);
     this.onCkickLink = this.onCkickLink.bind(this);
+    this.updateUrl = this.updateUrl.bind(this);
 
     this.state = {
-      url: this.props.appInfo.artifact ? this.props.appInfo.artifact[0]?.url : "",
+      url: "",
     };
+  }
+
+  componentDidUpdate(prevProps: DetailProps, prevState: DetailState) {
+    if (this.props.appInfo.text.commit !== prevProps.appInfo.text.commit) {
+      this.updateUrl(this.props.appInfo.artifact ? this.props.appInfo.artifact[0]?.url : "");
+    }
   }
 
   async onCkickLink() {
@@ -36,6 +50,10 @@ export default class Detail extends React.Component<{ appInfo: AppInfo }, { url:
     // link.download = this.state.name;
     // link.href = this.state.url;
     // link.click();
+  }
+
+  updateUrl(url: string) {
+    this.setState({ url });
   }
 
   render() {
@@ -72,14 +90,7 @@ export default class Detail extends React.Component<{ appInfo: AppInfo }, { url:
                 <Grid container justify="center" spacing={1}>
                   {this.props.appInfo.artifact.map((it, i) => (
                     <Grid item key={i}>
-                      <Chip
-                        label={it.name}
-                        onClick={() => {
-                          this.setState({ url: it.url });
-                        }}
-                        variant={this.state.url === it.url ? "default" : "outlined"}
-                        color="secondary"
-                      />
+                      <Chip label={it.name} onClick={() => this.updateUrl(it.url)} variant={this.state.url === it.url ? "default" : "outlined"} color="secondary" />
                     </Grid>
                   ))}
                 </Grid>
