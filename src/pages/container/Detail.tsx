@@ -18,6 +18,7 @@ interface DetailProps {
   appInfo: AppInfo;
 }
 interface DetailState {
+  name: string;
   url: string;
 }
 
@@ -28,31 +29,34 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
     this.updateUrl = this.updateUrl.bind(this);
 
     this.state = {
+      name: "",
       url: "",
     };
   }
 
   componentDidUpdate(prevProps: DetailProps, prevState: DetailState) {
     if (this.props.appInfo.text.commit !== prevProps.appInfo.text.commit) {
-      this.updateUrl(this.props.appInfo.artifact ? this.props.appInfo.artifact[0]?.url : "");
+      const name = this.props.appInfo.artifact?.[0].name || "";
+      const url = this.props.appInfo.artifact?.[0].url || "";
+      this.updateUrl(name, url);
     }
   }
 
   async onCkickLink() {
-    const url = await fetch(this.state.url, {
+    const { url } = await fetch(this.state.url, {
       headers: {
         Accept: "application/vnd.github.v3+json",
         "Content-Type": "application/zip",
+        "User-Agent": "TakenokoTech",
       },
     });
-    console.log(url);
-    // const link = document.createElement("a");
-    // link.download = this.state.name;
-    // link.href = this.state.url;
-    // link.click();
+    const link = document.createElement("a");
+    link.download = this.state.name;
+    link.href = url;
+    link.click();
   }
 
-  updateUrl(url: string) {
+  updateUrl(name: string, url: string) {
     this.setState({ url });
   }
 
@@ -90,7 +94,7 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
                 <Grid container justify="center" spacing={1}>
                   {this.props.appInfo.artifact.map((it, i) => (
                     <Grid item key={i}>
-                      <Chip label={it.name} onClick={() => this.updateUrl(it.url)} variant={this.state.url === it.url ? "default" : "outlined"} color="secondary" />
+                      <Chip label={it.name} onClick={() => this.updateUrl(it.name, it.url)} variant={this.state.url === it.url ? "default" : "outlined"} color="secondary" />
                     </Grid>
                   ))}
                 </Grid>

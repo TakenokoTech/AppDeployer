@@ -37,7 +37,7 @@ export async function getWorkflow(): Promise<WorkflowItem[]> {
   const resp2 = await fetch(url);
   const json2 = await resp2.json();
 
-  const workflows = json2.workflow_runs.map((workflow) => workflow);
+  const workflows = json2.workflow_runs?.map((workflow) => workflow) || [];
   // console.log(workflow.head_commit.id);
   // console.log(`>>>>> ${url}`);
   // console.log(workflow);
