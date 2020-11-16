@@ -36,8 +36,8 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
 
   componentDidUpdate(prevProps: DetailProps, prevState: DetailState) {
     if (this.props.appInfo.text.commit !== prevProps.appInfo.text.commit) {
-      const name = this.props.appInfo.artifact?.[0].name || "";
-      const url = this.props.appInfo.artifact?.[0].url || "";
+      const name = this.props.appInfo.artifact?.[0]?.name || "";
+      const url = this.props.appInfo.artifact?.[0]?.url || "";
       this.updateUrl(name, url);
     }
   }

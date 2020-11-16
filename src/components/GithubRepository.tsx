@@ -1,4 +1,5 @@
 import queryString from "query-string";
+import { clientId, redirectUri } from "./Const";
 
 export default {};
 
@@ -33,7 +34,9 @@ export async function getArtifactory(): Promise<any> {
 */
 
 export async function getWorkflow(): Promise<WorkflowItem[]> {
-  const url = "https://api.github.com/repos/TakenokoTech/UniTool/actions/runs";
+  // UniTool
+  // FlutterArchitecture
+  const url = "https://api.github.com/repos/TakenokoTech/FlutterArchitecture/actions/runs";
   const resp2 = await fetch(url);
   const json2 = await resp2.json();
 
@@ -73,6 +76,27 @@ export async function getPullRequest(workflow: WorkflowItem): Promise<any> {
   console.log("");
 
   return json as PullRequestItem;
+}
+
+export async function initAccount(code: string): Promise<string> {
+  const token = sessionStorage.getItem("token");
+  if (token) {
+    return token;
+  }
+
+  if (!code) {
+    window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}`;
+    return "";
+  }
+
+  const response = await fetch(`api/token?code=${code}`);
+  const { access_token, scope, token_type } = await response.json();
+  sessionStorage.setItem("token", access_token);
+
+  console.log(response.status);
+  console.log(access_token, scope, token_type);
+
+  return access_token;
 }
 
 /* eslint-disable camelcase */
