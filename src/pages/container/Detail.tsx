@@ -12,6 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import React from "react";
 import { AppInfo, initAppInfo } from "../../components/DataSource";
+import { getToken } from "../../components/GithubRepository";
 import QrUtil from "../../components/QrUtil";
 
 interface DetailProps {
@@ -45,6 +46,7 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
   async onCkickLink() {
     const { url } = await fetch(this.state.url, {
       headers: {
+        Authorization: `token ${getToken()}`,
         Accept: "application/vnd.github.v3+json",
         "Content-Type": "application/zip",
         "User-Agent": "TakenokoTech",

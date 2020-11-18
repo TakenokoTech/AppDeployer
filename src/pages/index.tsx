@@ -7,7 +7,7 @@ import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles";
 import React from "react";
 import DataSource, { AppInfo, initAppInfo } from "../components/DataSource";
-import { initAccount } from "../components/GithubRepository";
+import { getRepositories, initAccount } from "../components/GithubRepository";
 import { getParam } from "../components/Util";
 import Detail from "./container/Detail";
 import Header from "./container/Header";
@@ -37,6 +37,7 @@ class Home extends React.Component<HomeProps, HomeState> {
       const appInfo = await DataSource.getAppInfo();
       this.setState({ appInfo });
       await initAccount(getParam().code);
+      await getRepositories();
     })();
   }
 

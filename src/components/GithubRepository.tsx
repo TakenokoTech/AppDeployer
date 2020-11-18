@@ -1,38 +1,89 @@
+/* eslint-disable camelcase */
+
 import queryString from "query-string";
-import { clientId, redirectUri } from "./Const";
+import { clientId, redirectUri, oauthScope } from "./Const";
 
 export default {};
 
-export async function searchRepositories(searchWord: string): Promise<any> {
-  const query = queryString.stringify({
-    q: searchWord,
-    sort: "stars",
-    order: "desc",
+export function getToken(): string | null {
+  const token = sessionStorage.getItem("token");
+  console.log(`token: ${token}`);
+  return token;
+}
+
+export function getUser(): string | null {
+  const token = sessionStorage.getItem("user");
+  console.log(`user: ${token}`);
+  return token;
+}
+
+export function getRepos(): string | null {
+  const repos = sessionStorage.getItem("repos");
+  console.log(`user: ${repos}`);
+  return repos;
+}
+
+/**
+ * Get the authenticated user
+ * @param code authenticated code
+ *
+ * https://docs.github.com/en/free-pro-team@latest/rest/reference/users#get-the-authenticated-user
+ */
+export async function initAccount(code: string): Promise<void> {
+  if (getToken()) {
+    return;
+  }
+  if (!code) {
+    window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${oauthScope}`;
+    return;
+  }
+  const response = await fetch(`api/token?code=${code}`, {
+    headers: {
+      Accept: "application/vnd.github.v3+json",
+    },
   });
+  const { access_token, scope, token_type } = await response.json();
+  sessionStorage.setItem("token", access_token);
+  // console.log(access_token, scope, token_type);
 
-  const resp = await fetch(`https://api.github.com/search/repositories?${query}`);
-  const json = await resp.json();
-
-  // console.log(json.items[0].full_name);
-  // console.log(json.items[0].html_url);
-
-  return [];
+  const url = "https://api.github.com/user";
+  const resp = await fetch(url, {
+    headers: {
+      Authorization: `token ${getToken()}`,
+      Accept: "application/vnd.github.v3+json",
+    },
+  });
+  const { login, repos_url } = await resp.json();
+  sessionStorage.setItem("user", login);
+  sessionStorage.setItem("repos", repos_url);
+  // console.log(login);
 }
 
-/*
-export async function getCommits(): Promise<any> {
-  const resp = await fetch("https://api.github.com/repos/TakenokoTech/FlutterArchitecture/commits");
+/**
+ * Lists repositories
+ *
+ * https://docs.github.com/en/free-pro-team@latest/rest/reference/repos#list-organization-repositories
+ */
+export async function getRepositories(): Promise<RepoItem[]> {
+  const resp = await fetch(`${getRepos()}?per_page=100`, {});
   const json = await resp.json();
-  console.log(json);
+
+  const repos =
+    json.map((repo) => ({
+      name: repo.name,
+      full_name: repo.full_name,
+      html_url: repo.html_url,
+    })) || [];
+  // console.log(json);
+
+  return repos;
 }
 
-export async function getArtifactory(): Promise<any> {
-  const resp = await fetch("https://api.github.com/repos/TakenokoTech/FlutterArchitecture/actions/artifacts");
-  const json = await resp.json();
-  console.log(json);
-}
-*/
-
+/**
+ * List workflow runs for a repository
+ *
+ * https://docs.github.com/en/free-pro-team@latest/rest/reference/actions#list-workflow-runs-for-a-repository
+ */
 export async function getWorkflow(): Promise<WorkflowItem[]> {
   // UniTool
   // FlutterArchitecture
@@ -49,6 +100,12 @@ export async function getWorkflow(): Promise<WorkflowItem[]> {
   return workflows;
 }
 
+/**
+ * List artifacts for a repository
+ * @param workflow workflow
+ *
+ * https://docs.github.com/en/free-pro-team@latest/rest/reference/actions#list-artifacts-for-a-repository
+ */
 export async function getArtifact(workflow: WorkflowItem): Promise<ArtifactItem[]> {
   const url = workflow.artifacts_url;
 
@@ -64,39 +121,21 @@ export async function getArtifact(workflow: WorkflowItem): Promise<ArtifactItem[
   return artifact;
 }
 
+/**
+ * List PullRequest for a repository
+ * @param workflow workflow
+ */
 export async function getPullRequest(workflow: WorkflowItem): Promise<any> {
   if (workflow.pull_requests.length < 1) return {};
   const { url } = workflow.pull_requests[0];
 
   const resp = await fetch(url);
   const json = await resp.json();
-
-  console.log(`>>>>> ${url}`);
-  console.log(json.html_url);
-  console.log("");
+  // console.log(`>>>>> ${url}`);
+  // console.log(json.html_url);
+  // console.log("");
 
   return json as PullRequestItem;
-}
-
-export async function initAccount(code: string): Promise<string> {
-  const token = sessionStorage.getItem("token");
-  if (token) {
-    return token;
-  }
-
-  if (!code) {
-    window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}`;
-    return "";
-  }
-
-  const response = await fetch(`api/token?code=${code}`);
-  const { access_token, scope, token_type } = await response.json();
-  sessionStorage.setItem("token", access_token);
-
-  console.log(response.status);
-  console.log(access_token, scope, token_type);
-
-  return access_token;
 }
 
 /* eslint-disable camelcase */
@@ -133,6 +172,12 @@ export interface WorkflowItem {
   artifacts_url: string;
   repository: any;
   head_commit: any;
+}
+
+export interface RepoItem {
+  name: string;
+  full_name: string;
+  html_url: string;
 }
 
 interface PullRequestItem {
