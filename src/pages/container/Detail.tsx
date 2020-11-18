@@ -12,7 +12,6 @@ import Typography from "@material-ui/core/Typography";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import React from "react";
 import { AppInfo, initAppInfo } from "../../components/DataSource";
-import { getToken } from "../../components/GithubRepository";
 import QrUtil from "../../components/QrUtil";
 
 interface DetailProps {

@@ -1,10 +1,13 @@
-import { InputBase } from "@material-ui/core";
+import { InputBase, MenuItem } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
+import Select from "@material-ui/core/Select/Select";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import React from "react";
+import { AppInfo } from "../../components/DataSource";
+import { RepoItem } from "../../components/GithubRepository";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -57,8 +60,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header(): JSX.Element {
+interface HeaderProps {
+  appInfo: AppInfo;
+  repos: RepoItem[];
+  changeRepo: (repo: string) => void;
+}
+
+export default function Header(props: HeaderProps): JSX.Element {
   const classes = useStyles();
+  const { appInfo, repos } = props;
 
   return (
     <AppBar position="static" className={classes.appBar}>
@@ -66,7 +76,7 @@ export default function Header(): JSX.Element {
         <Typography variant="h6" className={classes.title}>
           Apricot
         </Typography>
-        <div className={classes.search}>
+        {/* <div className={classes.search}>
           <div className={classes.searchIcon}>
             <SearchIcon />
           </div>
@@ -78,7 +88,14 @@ export default function Header(): JSX.Element {
             }}
             inputProps={{ "aria-label": "search" }}
           />
-        </div>
+        </div> */}
+        <Select labelId="demo-simple-select-filled-label" id="demo-simple-select-filled" value={appInfo.appName} onChange={(e) => props.changeRepo(`${e.target.value}`)}>
+          {repos?.map((it, i) => (
+            <MenuItem key={i} value={it.name}>
+              {it.full_name}
+            </MenuItem>
+          ))}
+        </Select>
       </Toolbar>
     </AppBar>
   );

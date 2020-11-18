@@ -2,26 +2,9 @@
 
 import queryString from "query-string";
 import { clientId, redirectUri, oauthScope } from "./Const";
+import { getToken, getRepos, getUser } from "./DataSource";
 
 export default {};
-
-export function getToken(): string | null {
-  const token = sessionStorage.getItem("token");
-  console.log(`token: ${token}`);
-  return token;
-}
-
-export function getUser(): string | null {
-  const token = sessionStorage.getItem("user");
-  console.log(`user: ${token}`);
-  return token;
-}
-
-export function getRepos(): string | null {
-  const repos = sessionStorage.getItem("repos");
-  console.log(`user: ${repos}`);
-  return repos;
-}
 
 /**
  * Get the authenticated user
@@ -84,10 +67,10 @@ export async function getRepositories(): Promise<RepoItem[]> {
  *
  * https://docs.github.com/en/free-pro-team@latest/rest/reference/actions#list-workflow-runs-for-a-repository
  */
-export async function getWorkflow(): Promise<WorkflowItem[]> {
+export async function getWorkflow(repoName: string): Promise<WorkflowItem[]> {
   // UniTool
   // FlutterArchitecture
-  const url = "https://api.github.com/repos/TakenokoTech/FlutterArchitecture/actions/runs";
+  const url = `https://api.github.com/repos/${getUser()}/${repoName}/actions/runs`;
   const resp2 = await fetch(url);
   const json2 = await resp2.json();
 

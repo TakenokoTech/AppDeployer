@@ -99,8 +99,8 @@ const mockData: AppInfo = {
   ],
 };
 
-async function getAppInfo(commit = null): Promise<AppInfo> {
-  const list = await getWorkflow();
+async function getAppInfo(repoName: string, commit = null): Promise<AppInfo> {
+  const list = await getWorkflow(repoName);
 
   if (list.length < 1) {
     return initAppInfo;
@@ -143,6 +143,30 @@ async function getAppInfo(commit = null): Promise<AppInfo> {
       comment: it.head_commit.message,
     })),
   };
+}
+
+export function getToken(): string | null {
+  const token = sessionStorage.getItem("token");
+  // console.log(`token: ${token}`);
+  return token;
+}
+
+export function getUser(): string | null {
+  const user = sessionStorage.getItem("user");
+  // console.log(`user: ${user}`);
+  return user;
+}
+
+export function getRepos(): string | null {
+  const repos = sessionStorage.getItem("repos");
+  // console.log(`repos: ${repos}`);
+  return repos;
+}
+
+export function lastRepo(): string | null {
+  const repo = sessionStorage.getItem("lastRepo");
+  // console.log(`lastRepo: ${repo}`);
+  return repo;
 }
 
 export default {
