@@ -35,6 +35,7 @@ class Home extends React.Component<HomeProps, HomeState> {
     this.state = { appInfo: DataSource.initAppInfo, repos: [] };
 
     (async () => {
+      if (getParam().error) return;
       await initAccount(getParam().code);
       const repos = await getRepositories();
       const appInfo = await DataSource.getAppInfo(SessionStorage.getLastRepo() || repos[0].name);
