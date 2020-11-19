@@ -3,11 +3,11 @@
 
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles";
 import React from "react";
-import DataSource, { AppInfo, initAppInfo, lastRepo } from "../components/DataSource";
+import DataSource, { AppInfo } from "../components/DataSource";
 import { getRepositories, initAccount, RepoItem } from "../components/GithubRepository";
+import SessionStorage from "../components/SessionStorage";
 import { getParam } from "../components/Util";
 import Detail from "./container/Detail";
 import Header from "./container/Header";
@@ -32,12 +32,12 @@ interface HomeState {
 class Home extends React.Component<HomeProps, HomeState> {
   constructor(props: HomeProps) {
     super(props);
-    this.state = { appInfo: initAppInfo, repos: [] };
+    this.state = { appInfo: DataSource.initAppInfo, repos: [] };
 
     (async () => {
       await initAccount(getParam().code);
       const repos = await getRepositories();
-      const appInfo = await DataSource.getAppInfo(lastRepo() || repos[0].name);
+      const appInfo = await DataSource.getAppInfo(SessionStorage.getLastRepo() || repos[0].name);
       this.setState({ repos, appInfo });
     })();
   }
@@ -52,7 +52,7 @@ class Home extends React.Component<HomeProps, HomeState> {
     const changeRepo = async (repoName: string) => {
       const newAppInfo = await DataSource.getAppInfo(repoName);
       this.setState({ appInfo: newAppInfo });
-      sessionStorage.setItem("lastRepo", newAppInfo.appName);
+      SessionStorage.setLastRepo(newAppInfo.appName);
     };
 
     return (

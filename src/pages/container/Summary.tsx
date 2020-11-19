@@ -5,7 +5,7 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
-import { AppInfo, initAppInfo } from "../../components/DataSource";
+import { AppInfo } from "../../components/DataSource";
 
 const useStyles = makeStyles((theme) => ({
   summaryContainer: {
@@ -31,8 +31,8 @@ export default function Summary(props: { appInfo: AppInfo }): JSX.Element {
   const classes = useStyles();
 
   const { appInfo } = props;
-  const { logoImg, packageName, appName, uploadDate, text } = appInfo || initAppInfo;
-  const { branch } = text;
+  const { logoImg, packageName, appName, uploadDate, text } = appInfo || {};
+  const { branch } = text || {};
 
   return (
     <Paper elevation={3}>

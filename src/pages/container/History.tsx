@@ -8,7 +8,7 @@ import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import Schedule from "@material-ui/icons/Schedule";
 import React from "react";
-import { AppInfo, initAppInfo, HistoryItem } from "../../components/DataSource";
+import { AppInfo, HistoryItem } from "../../components/DataSource";
 import { joinIndexed } from "../../components/Util";
 
 const useStyles = makeStyles((theme) => ({
@@ -81,7 +81,7 @@ export default function History(props: HistoryProps): JSX.Element {
   const classes = useStyles();
 
   const { appInfo } = props;
-  const { history } = appInfo || initAppInfo;
+  const history = appInfo?.history || [];
 
   const listItem = (item: HistoryItem, isSelected: boolean) => (
     <ButtonBase focusRipple className={classes.button} key={item.date} onClick={() => props.changeItem(item.commit)}>

@@ -31,4 +31,10 @@ export function getParam(): any {
   }
 }
 
+export const isBrowser = (() => {
+  const b = typeof window !== "undefined";
+  // console.log(`isBrowser: ${b}`);
+  return b;
+})();
+
 export default {};

@@ -2,7 +2,7 @@
 /* eslint-disable max-len */
 
 import moment from "moment";
-import { ArtifactItem, getArtifact, getPullRequest, getWorkflow, searchRepositories, WorkflowItem } from "./GithubRepository";
+import { getArtifact, getWorkflow } from "./GithubRepository";
 
 export interface Description {
   repository: string;
@@ -29,7 +29,7 @@ export interface AppInfo {
   history: HistoryItem[];
 }
 
-export const initAppInfo: AppInfo = {
+const initAppInfo: AppInfo = {
   logoImg: "",
   packageName: "",
   appName: "",
@@ -48,55 +48,6 @@ export const initAppInfo: AppInfo = {
     log: "",
   },
   history: [],
-};
-
-const mockData: AppInfo = {
-  logoImg: "apricot_img.png",
-  packageName: "tach.takenoko.sampleapp",
-  appName: "SampleApp",
-  uploadDate: "2020/01/01 11:22",
-  artifact: [
-    {
-      name: "app1",
-      url: "app1",
-    },
-    {
-      name: "app2",
-      url: "app2",
-    },
-  ],
-  text: {
-    repository: "Repository",
-    branch: "master",
-    commit: "3d1c536b90235a5....",
-    log: "PR-1:build",
-  },
-  link: {
-    repository: "https://www.google.com/",
-    branch: "https://www.google.com/",
-    commit: "https://www.google.com/",
-    log: "https://www.google.com/",
-  },
-  history: [
-    {
-      date: "2020/01/01 11:22",
-      branch: "branch1",
-      commit: "#234la2",
-      comment: "commit comment 1",
-    },
-    {
-      date: "2020/01/02 11:22",
-      branch: "branch2",
-      commit: "#ab34rf",
-      comment: "commit comment 2",
-    },
-    {
-      date: "2020/01/03 11:22",
-      branch: "branch3",
-      commit: "#asda34k",
-      comment: "commit comment 3",
-    },
-  ],
 };
 
 async function getAppInfo(repoName: string, commit = null): Promise<AppInfo> {
@@ -145,31 +96,7 @@ async function getAppInfo(repoName: string, commit = null): Promise<AppInfo> {
   };
 }
 
-export function getToken(): string | null {
-  const token = sessionStorage.getItem("token");
-  // console.log(`token: ${token}`);
-  return token;
-}
-
-export function getUser(): string | null {
-  const user = sessionStorage.getItem("user");
-  // console.log(`user: ${user}`);
-  return user;
-}
-
-export function getRepos(): string | null {
-  const repos = sessionStorage.getItem("repos");
-  // console.log(`repos: ${repos}`);
-  return repos;
-}
-
-export function lastRepo(): string | null {
-  const repo = sessionStorage.getItem("lastRepo");
-  // console.log(`lastRepo: ${repo}`);
-  return repo;
-}
-
 export default {
-  getAppInfo,
   initAppInfo,
+  getAppInfo,
 };

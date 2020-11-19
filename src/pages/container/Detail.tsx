@@ -11,8 +11,9 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import React from "react";
-import { AppInfo, initAppInfo } from "../../components/DataSource";
+import { AppInfo } from "../../components/DataSource";
 import QrUtil from "../../components/QrUtil";
+import SessionStorage from "../../components/SessionStorage";
 
 interface DetailProps {
   appInfo: AppInfo;
@@ -45,7 +46,7 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
   async onCkickLink() {
     const { url } = await fetch(this.state.url, {
       headers: {
-        Authorization: `token ${getToken()}`,
+        Authorization: `token ${SessionStorage.getToken()}`,
         Accept: "application/vnd.github.v3+json",
         "Content-Type": "application/zip",
         "User-Agent": "TakenokoTech",
@@ -62,7 +63,7 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
   }
 
   render() {
-    const { uploadDate, text, link } = this.props.appInfo || initAppInfo;
+    const { uploadDate, text, link } = this.props.appInfo || {};
 
     function FormRow(args: { value1: string; value2: string; link: string }) {
       return (
@@ -93,7 +94,7 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
                   <canvas style={{ padding: "8px 32px" }} ref={(el) => QrUtil.renderQR(el, this.state.url)} width="160" height="160" />
                 </Box>
                 <Grid container justify="center" spacing={1}>
-                  {this.props.appInfo.artifact.map((it, i) => (
+                  {this.props.appInfo?.artifact.map((it, i) => (
                     <Grid item key={i}>
                       <Chip label={it.name} onClick={() => this.updateUrl(it.name, it.url)} variant={this.state.url === it.url ? "default" : "outlined"} color="secondary" />
                     </Grid>
@@ -123,10 +124,10 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
               <Grid item xs={1} sm={2} />
               <Grid item xs={12} sm={8}>
                 <FormRow value1="Upload Date" value2={uploadDate} link={null} />
-                <FormRow value1="Repository" value2={text.repository} link={link.repository} />
-                <FormRow value1="Brunch" value2={text.branch} link={link.branch} />
-                <FormRow value1="Commit" value2={text.commit.substring(0, 6)} link={link.commit} />
-                <FormRow value1="Log" value2={text.log} link={link.log} />
+                <FormRow value1="Repository" value2={text?.repository} link={link?.repository} />
+                <FormRow value1="Brunch" value2={text?.branch} link={link?.branch} />
+                <FormRow value1="Commit" value2={text?.commit.substring(0, 6)} link={link?.commit} />
+                <FormRow value1="Log" value2={text?.log} link={link?.log} />
               </Grid>
               <Grid item xs={1} sm={2} />
             </Grid>

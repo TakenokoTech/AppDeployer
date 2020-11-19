@@ -1,8 +1,9 @@
 /* eslint-disable camelcase */
 
 import queryString from "query-string";
-import { clientId, redirectUri, oauthScope } from "./Const";
-import { getToken, getRepos, getUser } from "./DataSource";
+import { clientId, redirectUri, oauthScope, clientSecret } from "./Const";
+import SessionStorage from "./SessionStorage";
+import { isBrowser } from "./Util";
 
 export default {};
 
@@ -13,32 +14,35 @@ export default {};
  * https://docs.github.com/en/free-pro-team@latest/rest/reference/users#get-the-authenticated-user
  */
 export async function initAccount(code: string): Promise<void> {
-  if (getToken()) {
+  if (SessionStorage.getToken()) {
     return;
   }
-  if (!code) {
+  if (!code && isBrowser) {
     window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${oauthScope}`;
     return;
   }
-  const response = await fetch(`api/token?code=${code}`, {
+
+  const accessTokenUrl = "https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token";
+  const response = await fetch(`${accessTokenUrl}?client_id=${clientId}&client_secret=${clientSecret}&code=${code}&redirect_uri=${redirectUri}`, {
+    method: "POST",
     headers: {
-      Accept: "application/vnd.github.v3+json",
+      Accept: "application/json",
     },
   });
   const { access_token, scope, token_type } = await response.json();
-  sessionStorage.setItem("token", access_token);
+  SessionStorage.setToken(access_token);
   // console.log(access_token, scope, token_type);
 
   const url = "https://api.github.com/user";
   const resp = await fetch(url, {
     headers: {
-      Authorization: `token ${getToken()}`,
+      Authorization: `token ${SessionStorage.getToken()}`,
       Accept: "application/vnd.github.v3+json",
     },
   });
   const { login, repos_url } = await resp.json();
-  sessionStorage.setItem("user", login);
-  sessionStorage.setItem("repos", repos_url);
+  SessionStorage.setUser(login);
+  SessionStorage.setRepos(repos_url);
   // console.log(login);
 }
 
@@ -48,7 +52,7 @@ export async function initAccount(code: string): Promise<void> {
  * https://docs.github.com/en/free-pro-team@latest/rest/reference/repos#list-organization-repositories
  */
 export async function getRepositories(): Promise<RepoItem[]> {
-  const resp = await fetch(`${getRepos()}?per_page=100`, {});
+  const resp = await fetch(`${SessionStorage.getRepos()}?per_page=100`, {});
   const json = await resp.json();
 
   const repos =
@@ -70,7 +74,7 @@ export async function getRepositories(): Promise<RepoItem[]> {
 export async function getWorkflow(repoName: string): Promise<WorkflowItem[]> {
   // UniTool
   // FlutterArchitecture
-  const url = `https://api.github.com/repos/${getUser()}/${repoName}/actions/runs`;
+  const url = `https://api.github.com/repos/${SessionStorage.getUser()}/${repoName}/actions/runs`;
   const resp2 = await fetch(url);
   const json2 = await resp2.json();
 
@@ -163,7 +167,7 @@ export interface RepoItem {
   html_url: string;
 }
 
-interface PullRequestItem {
+export interface PullRequestItem {
   url: string;
   id: number;
   node_id: string;

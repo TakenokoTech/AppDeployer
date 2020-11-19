@@ -68,7 +68,7 @@ interface HeaderProps {
 
 export default function Header(props: HeaderProps): JSX.Element {
   const classes = useStyles();
-  const { appInfo, repos } = props;
+  const { appInfo, repos } = props || {};
 
   return (
     <AppBar position="static" className={classes.appBar}>
@@ -89,7 +89,7 @@ export default function Header(props: HeaderProps): JSX.Element {
             inputProps={{ "aria-label": "search" }}
           />
         </div> */}
-        <Select labelId="demo-simple-select-filled-label" id="demo-simple-select-filled" value={appInfo.appName} onChange={(e) => props.changeRepo(`${e.target.value}`)}>
+        <Select labelId="demo-simple-select-filled-label" id="demo-simple-select-filled" value={appInfo?.appName} onChange={(e) => props.changeRepo(`${e.target.value}`)}>
           {repos?.map((it, i) => (
             <MenuItem key={i} value={it.name}>
               {it.full_name}
