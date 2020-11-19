@@ -1,4 +1,4 @@
-type JoinItem<T> = (index: number) => T
+type JoinItem<T> = (index: number) => T;
 
 export function joinIndexed<T>(arr: JoinItem<T>[], separator: JoinItem<T>): T[] {
   const newArr: JoinItem<T>[] = [];
@@ -8,5 +8,33 @@ export function joinIndexed<T>(arr: JoinItem<T>[], separator: JoinItem<T>): T[] 
   });
   return newArr.map((a: JoinItem<T>, i: number) => a(i));
 }
+
+export function getParam(): any {
+  try {
+    let urlParamStr = window?.location?.search;
+    if (!urlParamStr) {
+      return {};
+    }
+
+    urlParamStr = urlParamStr.substring(1);
+    let params = {};
+    urlParamStr.split("&").forEach((param) => {
+      const temp = param.split("=");
+      params = {
+        ...params,
+        [temp[0]]: temp[1],
+      };
+    });
+    return params;
+  } catch (e) {
+    return {};
+  }
+}
+
+export const isBrowser = (() => {
+  const b = typeof window !== "undefined";
+  // console.log(`isBrowser: ${b}`);
+  return b;
+})();
 
 export default {};

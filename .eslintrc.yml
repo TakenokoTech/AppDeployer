@@ -8,8 +8,8 @@ extends:
   - "plugin:import/errors"
   - "plugin:import/warnings"
   - "plugin:import/typescript"
-  - 'plugin:@typescript-eslint/eslint-recommended'
-  - 'plugin:@typescript-eslint/recommended'
+  - "plugin:@typescript-eslint/eslint-recommended"
+  - "plugin:@typescript-eslint/recommended"
 
 parser: "@typescript-eslint/parser"
 
@@ -35,5 +35,6 @@ rules:
     "no-use-before-define": "off",
     "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
     "sort-imports": 0,
-    "import/order": [2, { "alphabetize": { "order": "asc" } }]
+    "import/order": [2, { "alphabetize": { "order": "asc" } }],
+    "react/jsx-one-expression-per-line": 0,
   }
