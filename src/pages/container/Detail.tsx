@@ -83,7 +83,7 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
     }
 
     return (
-      <Paper elevation={4}>
+      <Paper elevation={3}>
         <Box p={3} m={1}>
           <Grid container spacing={3}>
             <Box p={1} />
