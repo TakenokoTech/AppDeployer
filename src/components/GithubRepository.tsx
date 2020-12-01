@@ -1,6 +1,7 @@
+/* eslint-disable operator-linebreak */
+/* eslint-disable object-curly-newline */
 /* eslint-disable camelcase */
 
-import queryString from "query-string";
 import { clientId, redirectUri, oauthScope, clientSecret } from "./Const";
 import SessionStorage from "./SessionStorage";
 import { isBrowser } from "./Util";
@@ -13,13 +14,13 @@ export default {};
  *
  * https://docs.github.com/en/free-pro-team@latest/rest/reference/users#get-the-authenticated-user
  */
-export async function initAccount(code: string): Promise<void> {
+export async function initAccount(code: string): Promise<boolean> {
   if (SessionStorage.getToken()) {
-    return;
+    return true;
   }
   if (!code && isBrowser) {
     window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${oauthScope}`;
-    return;
+    return false;
   }
 
   const accessTokenUrl = "https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token";
@@ -44,6 +45,7 @@ export async function initAccount(code: string): Promise<void> {
   SessionStorage.setUser(login);
   SessionStorage.setRepos(repos_url);
   // console.log(login);
+  return true;
 }
 
 /**
