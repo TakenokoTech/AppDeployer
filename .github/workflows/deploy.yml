@@ -28,6 +28,7 @@ jobs:
           touch ./out/.nojekyll
         env:
           GITHUB_PAGES: ${{ github.ref == 'refs/heads/main' }}
+          CI: ${{ true }}
 
       # Deploy Netlify
       - name: Deploy to netlify
