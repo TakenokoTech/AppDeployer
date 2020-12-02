@@ -1,7 +1,10 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable max-len */
 
+// import { Unzip } from "zlib";
+import { resolve } from "path";
 import moment from "moment";
+import unzip from "zlibjs/bin/unzip.min.js";
 import { getArtifact, getWorkflow } from "./GithubRepository";
 
 export interface Description {
@@ -94,6 +97,22 @@ async function getAppInfo(repoName: string, commit = null): Promise<AppInfo> {
       comment: it.head_commit.message,
     })),
   };
+}
+
+export async function getZipFilenames(url: string): Promise<string[]> {
+  return new Promise((res) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.responseType = "arraybuffer";
+    xhr.send();
+
+    xhr.addEventListener("load", () => {
+      const { Zlib } = unzip;
+      const unzipFile = new Zlib.Unzip(Buffer.from(xhr.response));
+      const filenames = unzipFile.getFilenames();
+      res(filenames);
+    });
+  });
 }
 
 export default {

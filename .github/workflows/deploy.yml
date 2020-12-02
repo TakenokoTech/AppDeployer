@@ -28,6 +28,11 @@ jobs:
           touch ./out/.nojekyll
         env:
           GITHUB_PAGES: ${{ github.ref == 'refs/heads/main' }}
+          CI: ${{ true }}
+          CLIENT_ID_PROD: ${{ secrets.CLIENT_ID_PROD }}
+          CLIENT_ID_STG: ${{ secrets.CLIENT_ID_STG }}
+          CLIENT_SECRET_PROD: ${{ secrets.CLIENT_SECRET_PROD }}
+          CLIENT_SECRET_STG: ${{ secrets.CLIENT_SECRET_STG }}
 
       # Deploy Netlify
       - name: Deploy to netlify

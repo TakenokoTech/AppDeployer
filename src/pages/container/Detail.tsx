@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-globals */
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable react/destructuring-assignment */
 
@@ -11,7 +13,7 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import React from "react";
-import { AppInfo } from "../../components/DataSource";
+import { AppInfo, getZipFilenames } from "../../components/DataSource";
 import QrUtil from "../../components/QrUtil";
 import SessionStorage from "../../components/SessionStorage";
 
@@ -20,31 +22,32 @@ interface DetailProps {
 }
 interface DetailState {
   name: string;
-  url: string;
+  artifactUrl: string;
+  qrUrl: string;
 }
 
 export default class Detail extends React.Component<DetailProps, DetailState> {
   constructor(props: { appInfo: AppInfo }) {
     super(props);
-    this.onCkickLink = this.onCkickLink.bind(this);
-    this.updateUrl = this.updateUrl.bind(this);
 
     this.state = {
       name: "",
-      url: "",
+      artifactUrl: "",
+      qrUrl: "",
     };
   }
 
   componentDidUpdate(prevProps: DetailProps, prevState: DetailState) {
     if (this.props.appInfo.text.commit !== prevProps.appInfo.text.commit) {
       const name = this.props.appInfo.artifact?.[0]?.name || "";
-      const url = this.props.appInfo.artifact?.[0]?.url || "";
-      this.updateUrl(name, url);
+      const artifactUrl = this.props.appInfo.artifact?.[0]?.url || "";
+      const qrUrl = `${location.protocol}//${location.host}?repoName=${this.props.appInfo.appName}&commit=${this.props.appInfo.text.commit}`;
+      this.updateArtifactUrl(name, artifactUrl, qrUrl);
     }
   }
 
-  async onCkickLink() {
-    const { url } = await fetch(this.state.url, {
+  onCkickLink = async () => {
+    const { url } = await fetch(this.state.artifactUrl, {
       headers: {
         Authorization: `token ${SessionStorage.getToken()}`,
         Accept: "application/vnd.github.v3+json",
@@ -56,11 +59,15 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
     link.download = this.state.name;
     link.href = url;
     link.click();
-  }
+    // getZipFilenames(url);
+  };
 
-  updateUrl(name: string, url: string) {
-    this.setState({ url });
-  }
+  updateArtifactUrl = (name: string, artifactUrl: string, qrUrl: string) => {
+    // console.log(name);
+    // console.log(artifactUrl);
+    // console.log(qrUrl);
+    this.setState({ artifactUrl, qrUrl });
+  };
 
   render() {
     const { uploadDate, text, link } = this.props.appInfo || {};
@@ -83,7 +90,7 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
     }
 
     return (
-      <Paper elevation={4}>
+      <Paper elevation={3}>
         <Box p={3} m={1}>
           <Grid container spacing={3}>
             <Box p={1} />
@@ -91,12 +98,17 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
               <Grid item xs={1} sm={2} />
               <Grid item xs={12} sm={4}>
                 <Box display="flex" justifyContent="center">
-                  <canvas style={{ padding: "8px 32px" }} ref={(el) => QrUtil.renderQR(el, this.state.url)} width="160" height="160" />
+                  <canvas style={{ padding: "8px 32px" }} ref={(el) => QrUtil.renderQR(el, this.state.qrUrl)} width="160" height="160" />
                 </Box>
                 <Grid container justify="center" spacing={1}>
                   {this.props.appInfo?.artifact.map((it, i) => (
                     <Grid item key={i}>
-                      <Chip label={it.name} onClick={() => this.updateUrl(it.name, it.url)} variant={this.state.url === it.url ? "default" : "outlined"} color="secondary" />
+                      <Chip
+                        label={it.name}
+                        onClick={() => this.updateArtifactUrl(it.name, it.url, this.state.qrUrl)}
+                        variant={this.state.artifactUrl === it.url ? "default" : "outlined"}
+                        color="secondary"
+                      />
                     </Grid>
                   ))}
                 </Grid>

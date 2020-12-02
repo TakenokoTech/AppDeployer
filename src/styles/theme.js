@@ -21,7 +21,15 @@ const theme = createMuiTheme({
       main: red.A400,
     },
     background: {
-      default: "#fff",
+      default: "#fdfdfd",
+    },
+  },
+  overrides: {
+    MuiPaper: {
+      elevation3: {
+        boxShadow: "0px 0 1px 1px rgba(0,0,0,0.15);",
+        borderRadius: "8px",
+      },
     },
   },
 });

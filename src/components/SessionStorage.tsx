@@ -52,6 +52,19 @@ function getLastRepo(): string | null {
   return repo;
 }
 
+function setLastCommit(lastCommit: string): void {
+  if (!isBrowser) return;
+  sessionStorage.setItem("lastCommit", lastCommit);
+  // console.log(`lastCommit: ${lastRepo}`);
+}
+
+function getLastCommit(): string | null {
+  if (!isBrowser) return null;
+  const repo = sessionStorage.getItem("lastCommit");
+  // console.log(`lastCommit: ${repo}`);
+  return repo;
+}
+
 export default {
   setToken,
   getToken,
@@ -61,4 +74,6 @@ export default {
   getRepos,
   setLastRepo,
   getLastRepo,
+  setLastCommit,
+  getLastCommit,
 };

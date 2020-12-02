@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unused-prop-types */
+/* eslint-disable react/no-array-index-key */
 import { InputBase, MenuItem } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Select from "@material-ui/core/Select/Select";
