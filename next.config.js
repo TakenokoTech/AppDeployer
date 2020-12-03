@@ -18,5 +18,6 @@ module.exports = {
   env: {
     CLIENT_ID: isGithubPages ? process.env.CLIENT_ID_PROD : isCi ? process.env.CLIENT_ID_STG : "57f202d4c1f07138cd6a",
     CLIENT_SECRET: isGithubPages ? process.env.CLIENT_SECRET_PROD : isCi ? process.env.CLIENT_SECRET_STG : "abef994f0f63495819116190ca6fdd05a4499226",
+    REDIRECT_URL: isGithubPages ? "/apricot" : "",
   },
 };
