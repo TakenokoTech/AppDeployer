@@ -65,6 +65,14 @@ function getLastCommit(): string | null {
   return repo;
 }
 
+function clear() {
+  sessionStorage.removeItem("token");
+  sessionStorage.removeItem("user");
+  sessionStorage.removeItem("repos");
+  // sessionStorage.removeItem("lastRepo");
+  // sessionStorage.removeItem("lastCommit");
+}
+
 export default {
   setToken,
   getToken,
@@ -76,4 +84,5 @@ export default {
   getLastRepo,
   setLastCommit,
   getLastCommit,
+  clear,
 };
