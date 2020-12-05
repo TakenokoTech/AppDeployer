@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 type JoinItem<T> = (index: number) => T;
 
 export function joinIndexed<T>(arr: JoinItem<T>[], separator: JoinItem<T>): T[] {
@@ -36,5 +37,13 @@ export const isBrowser = (() => {
   // console.log(`isBrowser: ${b}`);
   return b;
 })();
+
+export function deleteQuery(name: string): void {
+  if (!isBrowser) return;
+  const url = new URL(location.toString());
+  // console.log(url.search);
+  url.searchParams.delete(name);
+  window.history.replaceState(null, null, location.pathname + url.search);
+}
 
 export default {};

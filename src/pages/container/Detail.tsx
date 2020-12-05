@@ -14,6 +14,7 @@ import Typography from "@material-ui/core/Typography";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import React from "react";
 import { AppInfo, getZipFilenames } from "../../components/DataSource";
+import { getArtifactUrl } from "../../components/GithubRepository";
 import QrUtil from "../../components/QrUtil";
 import SessionStorage from "../../components/SessionStorage";
 
@@ -47,14 +48,7 @@ export default class Detail extends React.Component<DetailProps, DetailState> {
   }
 
   onCkickLink = async () => {
-    const { url } = await fetch(this.state.artifactUrl, {
-      headers: {
-        Authorization: `token ${SessionStorage.getToken()}`,
-        Accept: "application/vnd.github.v3+json",
-        "Content-Type": "application/zip",
-        "User-Agent": "TakenokoTech",
-      },
-    });
+    const url = await getArtifactUrl(this.state.artifactUrl);
     const link = document.createElement("a");
     link.download = this.state.name;
     link.href = url;

@@ -9,10 +9,11 @@ import React from "react";
 import DataSource, { AppInfo } from "../components/DataSource";
 import { getRepositories, initAccount, RepoItem } from "../components/GithubRepository";
 import SessionStorage from "../components/SessionStorage";
-import { getParam } from "../components/Util";
+import { getParam, deleteQuery } from "../components/Util";
 import Detail from "./container/Detail";
 import Header from "./container/Header";
 import History from "./container/History";
+import ReloadDialog from "./container/ReloadDialog";
 import Summary from "./container/Summary";
 
 const styles = () => ({
@@ -38,10 +39,13 @@ class Home extends React.Component<HomeProps, HomeState> {
   }
 
   init = async () => {
+    const { code } = getParam();
+    deleteQuery("code");
+
     if (getParam().error) return;
     if (getParam().repoName) SessionStorage.setLastRepo(getParam().repoName);
     if (getParam().commit) SessionStorage.setLastCommit(getParam().commit);
-    if ((await initAccount(getParam().code)) === false) return;
+    if ((await initAccount(code)) === false) return;
     const repos = await getRepositories();
     const repo = SessionStorage.getLastRepo() || repos[0].name;
     const commit = SessionStorage.getLastCommit();
@@ -64,6 +68,8 @@ class Home extends React.Component<HomeProps, HomeState> {
 
   render() {
     const { classes } = this.props;
+    const openDialog = !SessionStorage.getToken() || !SessionStorage.getUser() || !SessionStorage.getRepos();
+
     return (
       <div className={classes.root}>
         <Header appInfo={this.state.appInfo} repos={this.state.repos} changeRepo={this.changeRepo} />
@@ -78,6 +84,7 @@ class Home extends React.Component<HomeProps, HomeState> {
             </Grid>
           </Grid>
         </Container>
+        <ReloadDialog openDialog={openDialog} />
       </div>
     );
   }

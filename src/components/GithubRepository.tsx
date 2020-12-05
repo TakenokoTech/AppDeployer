@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 /* eslint-disable operator-linebreak */
 /* eslint-disable object-curly-newline */
 /* eslint-disable camelcase */
@@ -34,8 +35,8 @@ export async function initAccount(code: string): Promise<boolean> {
   SessionStorage.setToken(access_token);
   // console.log(access_token, scope, token_type);
 
-  const url = "https://api.github.com/user";
-  const resp = await fetch(url, {
+  const apiUrl = "https://api.github.com/user";
+  const resp = await fetch(apiUrl, {
     headers: {
       Authorization: `token ${SessionStorage.getToken()}`,
       Accept: "application/vnd.github.v3+json",
@@ -55,8 +56,11 @@ export async function initAccount(code: string): Promise<boolean> {
  */
 export async function getRepositories(): Promise<RepoItem[]> {
   const resp = await fetch(`${SessionStorage.getRepos()}?per_page=100`, {});
-  const json = await resp.json();
+  if (!resp.ok) {
+    SessionStorage.clear();
+  }
 
+  const json = await resp.json();
   const repos =
     json.map((repo) => ({
       name: repo.name,
@@ -77,10 +81,13 @@ export async function getWorkflow(repoName: string): Promise<WorkflowItem[]> {
   // UniTool
   // FlutterArchitecture
   const url = `https://api.github.com/repos/${SessionStorage.getUser()}/${repoName}/actions/runs`;
-  const resp2 = await fetch(url);
-  const json2 = await resp2.json();
+  const resp = await fetch(url);
+  if (!resp.ok) {
+    SessionStorage.clear();
+  }
 
-  const workflows = json2.workflow_runs?.map((workflow) => workflow) || [];
+  const json = await resp.json();
+  const workflows = json.workflow_runs?.map((workflow) => workflow) || [];
   // console.log(workflow.head_commit.id);
   // console.log(`>>>>> ${url}`);
   // console.log(workflow);
@@ -125,6 +132,21 @@ export async function getPullRequest(workflow: WorkflowItem): Promise<any> {
   // console.log("");
 
   return json as PullRequestItem;
+}
+
+export async function getArtifactUrl(artifactUrl: string): Promise<string> {
+  const response = await fetch(artifactUrl, {
+    headers: {
+      Authorization: `token ${SessionStorage.getToken()}`,
+      Accept: "application/vnd.github.v3+json",
+      "Content-Type": "application/zip",
+      "User-Agent": SessionStorage.getUser(),
+    },
+  });
+  if (!response.ok) {
+    SessionStorage.clear();
+  }
+  return response.url;
 }
 
 /* eslint-disable camelcase */

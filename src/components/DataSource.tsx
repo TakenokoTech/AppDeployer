@@ -86,8 +86,8 @@ async function getAppInfo(repoName: string, commit = null): Promise<AppInfo> {
     })),
     link: {
       repository: `https://github.com/${workflow.repository.full_name}`,
-      branch: `https://github.com/TakenokoTech/FlutterArchitecture/tree/${workflow.head_branch}`,
-      commit: `https://github.com/TakenokoTech/FlutterArchitecture/commit/${workflow.head_commit.id}`,
+      branch: `https://github.com/${workflow.repository.full_name}/tree/${workflow.head_branch}`,
+      commit: `https://github.com/${workflow.repository.full_name}/commit/${workflow.head_commit.id}`,
       log: `https://github.com/${workflow.repository.full_name}/actions/runs/${workflow.id}`,
     },
     history: list.map((it) => ({
