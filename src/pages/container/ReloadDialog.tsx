@@ -9,7 +9,7 @@ import React from "react";
 
 const styles = () => ({
   progresBase: {
-    position: "fixed",
+    position: "fixed" as const,
     height: "100%",
     width: "100%",
     top: "0px",
@@ -17,7 +17,7 @@ const styles = () => ({
     backgroundColor: "rgba(0,0,0,0.5)",
   },
   progresCenter: {
-    position: "absolute",
+    position: "absolute" as const,
     top: "50%",
     left: "50%",
   },
