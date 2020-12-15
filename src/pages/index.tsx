@@ -29,12 +29,16 @@ interface HomeProps extends WithStyles<typeof styles> {
 interface HomeState {
   appInfo: AppInfo;
   repos: RepoItem[];
+  isLoading: boolean;
 }
 
 class Home extends React.Component<HomeProps, HomeState> {
   constructor(props: HomeProps) {
     super(props);
-    this.state = { appInfo: DataSource.initAppInfo, repos: [] };
+    this.state = { appInfo: DataSource.initAppInfo, repos: [], isLoading: false };
+  }
+
+  componentDidMount() {
     (async () => this.init())();
   }
 
@@ -45,12 +49,18 @@ class Home extends React.Component<HomeProps, HomeState> {
     if (getParam().error) return;
     if (getParam().repoName) SessionStorage.setLastRepo(getParam().repoName);
     if (getParam().commit) SessionStorage.setLastCommit(getParam().commit);
-    if ((await initAccount(code)) === false) return;
+    this.setState({ isLoading: true });
+
+    if ((await initAccount(code)) === false) {
+      this.setState({ isLoading: false });
+      return;
+    }
+
     const repos = await getRepositories();
     const repo = SessionStorage.getLastRepo() || repos[0].name;
     const commit = SessionStorage.getLastCommit();
     const appInfo = await DataSource.getAppInfo(repo, commit);
-    this.setState({ repos, appInfo });
+    this.setState({ repos, appInfo, isLoading: false });
   };
 
   changeRepo = async (repoName: string) => {
@@ -84,7 +94,7 @@ class Home extends React.Component<HomeProps, HomeState> {
             </Grid>
           </Grid>
         </Container>
-        <ReloadDialog openDialog={openDialog} />
+        <ReloadDialog isLoading={this.state.isLoading} openDialog={openDialog} />
       </div>
     );
   }
